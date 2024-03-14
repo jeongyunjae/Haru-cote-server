@@ -2,8 +2,29 @@ import { client } from '@src/db/database'
 import { addCommaForArray } from '@src/utils/problem.utils'
 import axios from 'axios'
 import { Context } from 'koa'
+import { ProblemResDataType } from './types'
 
-export async function getThisWeekProblem(ctx: Context) {
+export async function getThisWeekProblems(ctx: Context) {
+  const getProblems = `SELECT * from problem where is_thisweek = $1`
+  const { rows }: { rows: ProblemResDataType[] } = await client.query(
+    getProblems,
+    [true]
+  )
+  const result = rows.map((data) => {
+    return {
+      problemId: data.problem_id,
+      title: data.title,
+      level: data.level,
+      isSolved: data.is_solved,
+      person: data.person,
+      isThisWeek: data.is_thisWeek,
+    }
+  })
+  ctx.status = 200
+  ctx.body = result
+}
+
+export async function getThisWeekCandidateProblems(ctx: Context) {
   const getProblems = `SELECT * from problem where is_solved = $1`
 
   const {
@@ -17,8 +38,11 @@ export async function getThisWeekProblem(ctx: Context) {
     let subset: number[] = []
     const res = await client.query(getProblems, [false])
 
-    let test = [Number(level1Value), Number(level2Value), Number(level3Value)]
-    test.forEach((count, _i) => {
+    let shuffleData = [
+      Number(level1Value),
+      Number(level2Value),
+      Number(level3Value),
+    ].forEach((count, _i) => {
       const filteringLevel = res.rows
         .filter(({ level }) => level === _i + 1)
         .map(({ problem_id }) => problem_id)
@@ -34,7 +58,7 @@ export async function getThisWeekProblem(ctx: Context) {
       subset = [...subset, ...shuffled.slice(0, count)]
     })
 
-    const getdata = await axios({
+    const { data } = await axios({
       url: `https://solved.ac/api/v3/problem/lookup?problemIds=${addCommaForArray(
         subset
       )}`,
@@ -42,7 +66,7 @@ export async function getThisWeekProblem(ctx: Context) {
       headers: { Accept: 'application/json' },
     })
     ctx.status = 200
-    ctx.body = getdata.data
+    ctx.body = data
   } catch (error) {
     console.log(error)
     ctx.status = 500
@@ -53,4 +77,21 @@ export async function getThisWeekProblem(ctx: Context) {
   }
 }
 
-export async function postThisWeekProblem(ctx: Context) {}
+export async function postThisWeekProblems(ctx: any) {
+  const problems: [] = ctx.request.body
+  try {
+    problems.forEach(async ({ problemId, title }) => {
+      const sql = `UPDATE problem SET title = $1, is_thisweek = $2 WHERE problem_id = $3`
+      await client.query(sql, [title, true, problemId])
+    })
+
+    ctx.status = 200
+  } catch (error) {
+    console.log(error)
+    ctx.status = 500
+    ctx.message = 'Server error'
+    ctx.body = {
+      message: 'server error',
+    }
+  }
+}

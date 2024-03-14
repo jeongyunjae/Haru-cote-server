@@ -1,29 +1,33 @@
-import * as Koa from 'koa'
-import * as cors from '@koa/cors'
+import koa from 'koa'
+import cors from '@koa/cors'
+
 import * as dotenv from 'dotenv'
 import * as path from 'path'
-import * as bodyParser from 'koa-bodyparser'
 
 import { client } from '@src/db/database'
-import problemRouter from '@src/routes/problem'
+import problemRouter from '@src/routes/problems'
 
-const koaBody = require('koa-body')
 const morgan = require('koa-morgan')
 const Router = require('koa-router')
+const bodyParser = require('koa-bodyparser') // 모듈 가져오기
 
 dotenv.config({ path: path.join(__dirname, '../.env') })
-
-const app = new Koa()
-const api = new Router()
 const PORT = process.env.PORT || 3080
 
-app.use(bodyParser())
-
+const app = new koa()
 app.proxy = true
 app.use(cors())
 
+const api = new Router()
+
+app.use(bodyParser())
 app.use(api.routes())
-app.use(koaBody())
+
+app.use((ctx: any) => {
+  // the parsed body will store in ctx.request.body
+  // if nothing was parsed, body will be an empty object {}
+  ctx.body = ctx.request.body
+})
 
 api.use('/api/v1', problemRouter.routes())
 
