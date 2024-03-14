@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/routes/problem/index.ts"],"names":[],"mappings":";;AAAA,mEAAoE;AAEpE,IAAM,MAAM,GAAG,OAAO,CAAC,YAAY,CAAC,CAAA;AACpC,IAAM,OAAO,GAAG,IAAI,MAAM,EAAE,CAAA;AAE5B,OAAO,CAAC,GAAG,CAAC,oBAAoB,EAAE,eAAe,CAAC,kBAAkB,CAAC,CAAA;AACrE,OAAO,CAAC,IAAI,CAAC,oBAAoB,EAAE,eAAe,CAAC,mBAAmB,CAAC,CAAA;AAEvE,kBAAe,OAAO,CAAA"}
