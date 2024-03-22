@@ -5,7 +5,8 @@ import * as dotenv from 'dotenv'
 import * as path from 'path'
 
 import { client } from '@src/db/database'
-import problemRouter from '@src/routes/problems'
+import problemRouter from '@src/routes/problem'
+import memberRouter from '@src/routes/member'
 
 const morgan = require('koa-morgan')
 const Router = require('koa-router')
@@ -30,6 +31,7 @@ app.use((ctx: any) => {
 })
 
 api.use('/api/v1', problemRouter.routes())
+api.use('/api/v1', memberRouter.routes())
 
 client.connect().then(() => console.log('psql db connected'))
 
