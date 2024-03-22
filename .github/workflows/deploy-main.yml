@@ -27,6 +27,18 @@ jobs:
               env:
                 - name: NODE_ENV
                   value: production
+                - name: PROD_DB_USER
+                  secret: PROD_DB_USER
+                - name: PROD_DB_HOST
+                  secret: PROD_DB_HOST
+                - name: PROD_DB_DATABASE
+                  secret: PROD_DB_DATABASE
+                - name: PROD_DB_PASSWORD
+                  secret: PROD_DB_PASSWORD     
+                - name: PROD_DB_PORT
+                  value: PROD_DB_PORT     
+                - name: PROD_DOMAIN
+                  value: PROD_DOMAIN
               ports: "3080"
               install: yarn
               build: yarn build
