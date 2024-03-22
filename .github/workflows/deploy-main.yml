@@ -39,7 +39,7 @@ jobs:
                   value: PROD_DB_PORT     
                 - name: PROD_DOMAIN
                   value: PROD_DOMAIN
-              ports: "3080"
+              ports: 3080
               install: yarn
               build: yarn build
               start: yarn start
