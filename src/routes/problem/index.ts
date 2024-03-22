@@ -1,4 +1,4 @@
-import * as problemCtrlMain from '@src/routes/problems/controll.main'
+import * as problemCtrlMain from '@src/routes/problem/controll.main'
 
 const Router = require('koa-router')
 const problem = new Router()
