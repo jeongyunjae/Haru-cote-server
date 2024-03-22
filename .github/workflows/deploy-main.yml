@@ -36,9 +36,9 @@ jobs:
                 - name: PROD_DB_PASSWORD
                   secret: PROD_DB_PASSWORD     
                 - name: PROD_DB_PORT
-                  value: PROD_DB_PORT     
+                  var: PROD_DB_PORT     
                 - name: PROD_DOMAIN
-                  value: PROD_DOMAIN
+                  var: PROD_DOMAIN
               ports: 3080
               install: yarn
               build: yarn build
